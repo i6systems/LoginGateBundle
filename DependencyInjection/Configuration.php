@@ -41,8 +41,8 @@ class Configuration implements ConfigurationInterface
                     ->requiresAtLeastOneElement()
                     ->prototype('scalar')
                     ->validate()
-                    ->ifNotInArray(['session', 'orm', 'mongodb'])
-                    ->thenInvalid("Invalid storage type '%s'. Available types: 'session', 'orm', 'mongodb'")
+                    ->ifArray()
+                    ->thenInvalid("Storages are required.")
                 ->end()
         ;
 
