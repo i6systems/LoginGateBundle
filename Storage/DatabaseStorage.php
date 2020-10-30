@@ -13,7 +13,7 @@ class DatabaseStorage implements StorageInterface
     /**
      * @var string
      */
-    private $modelClassName;
+    protected $modelClassName;
 
     /**
      * @var int
