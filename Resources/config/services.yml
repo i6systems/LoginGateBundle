@@ -1,6 +1,7 @@
 parameters:
     anyx.login_gate.authentication.listener.form.class: Anyx\LoginGateBundle\Security\UsernamePasswordFormAuthenticationListener
     anyx.login_gate.authentication.listener.json.class: Anyx\LoginGateBundle\Security\UsernamePasswordJsonAuthenticationListener
+    anyx.login_gate.brute_force_checker.class: Anyx\LoginGateBundle\Service\BruteForceChecker
 
 services:
     anyx.login_gate.storage.session:
@@ -12,7 +13,7 @@ services:
     anyx.login_gate.attempt_storage:
         class: Anyx\LoginGateBundle\Storage\CompositeStorage
     anyx.login_gate.brute_force_checker:
-        class: Anyx\LoginGateBundle\Service\BruteForceChecker
+        class: "%anyx.login_gate.brute_force_checker.class%"
         arguments: ['@anyx.login_gate.attempt_storage', '@anyx.login_gate.username_resolver', '%anyx.login_gate.brute_force_checker_options%']
     anyx.login_gate.authentication_handler:
         class: Anyx\LoginGateBundle\Security\AuthenticationHandler
