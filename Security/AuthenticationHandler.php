@@ -7,8 +7,10 @@ use Anyx\LoginGateBundle\Storage\StorageInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\AuthenticationEvents;
 use Symfony\Component\Security\Core\Event\AuthenticationFailureEvent;
+use Symfony\Component\Security\Guard\Token\PreAuthenticationGuardToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 
@@ -46,6 +48,11 @@ class AuthenticationHandler implements EventSubscriberInterface
 
     public function onAuthenticationFailure(AuthenticationFailureEvent $event)
     {
+        // skip incrementing counts on the failed logins if the exception is triggered by
+        // the pre-authentication firewall
+        if ($event->getAuthenticationToken() instanceof PreAuthenticatedToken === true) {
+            return;
+        }
         $request = $this->getRequestStack()->getCurrentRequest();
 
         $this->getStorage()->incrementCountAttempts($request, $this->getUsername($request), $event->getAuthenticationException());
