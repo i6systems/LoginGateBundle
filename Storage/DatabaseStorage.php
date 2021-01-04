@@ -88,12 +88,7 @@ class DatabaseStorage implements StorageInterface
         if (!$this->hasIp($request)) {
             return;
         }
-        $loggedInFrom = null;
-        if ($request->request->has('logged-in-from') === true) {
-            $loggedInFrom = $request->request->get('logged-in-from');
-            $request->request->remove('logged-in-from');
-        }
-        $model = $this->createModel($loggedInFrom);
+        $model = $this->createModel();
 
         $model->setIp($request->getClientIp());
         $model->setUsername($username);
@@ -123,7 +118,7 @@ class DatabaseStorage implements StorageInterface
     /**
      * @return FailureLoginAttempt
      */
-    protected function createModel(?string $loggedInFrom)
+    protected function createModel()
     {
         return new $this->modelClassName();
     }
